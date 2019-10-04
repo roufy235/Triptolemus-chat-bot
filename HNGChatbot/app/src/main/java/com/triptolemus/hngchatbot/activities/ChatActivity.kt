@@ -19,6 +19,7 @@ import com.google.api.gax.core.FixedCredentialsProvider
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.google.cloud.dialogflow.v2.*
+import com.triptolemus.hngchatbot.BuildConfig
 import com.triptolemus.hngchatbot.ChatAdapter
 import com.triptolemus.hngchatbot.R
 import com.triptolemus.hngchatbot.RequestBotAsyncTask
@@ -61,6 +62,7 @@ class ChatActivity : AppCompatActivity(), View.OnClickListener {
         compositeDisposable = CompositeDisposable()
 
         backButton.setOnClickListener(this)
+        shareApp.setOnClickListener(this)
         clearChats.setOnClickListener(this)
         val layoutManager = LinearLayoutManager(this)
         layoutManager.stackFromEnd = true
@@ -142,6 +144,19 @@ class ChatActivity : AppCompatActivity(), View.OnClickListener {
                     }
                     .setCancelable(false)
                     .show()
+            }
+            item.id == R.id.shareApp -> {
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id="+ BuildConfig.APPLICATION_ID)
+                    type = "text/plain"
+                }
+                startActivity(
+                    Intent.createChooser(
+                        sendIntent,
+                        getString(R.string.app_name) + " App"
+                    )
+                )
             }
         }
     }
